@@ -45,12 +45,18 @@ describe('templates', () => {
     balance_minor: 150050,
     description: 'Term 1 fees',
     due_date: '2026-11-03',
+    reference: 'M-0427',
     pay_instructions: 'Orange Money merchant code 000000',
   };
 
   test('fills known placeholders', () => {
     expect(renderTemplate('{customer_name}: {amount} for {description} due {due_date}. {pay_instructions}', vars))
       .toBe('Fatmata Kamara: NLe 1,500.50 for Term 1 fees due 3 Nov 2026. Orange Money merchant code 000000');
+  });
+
+  test('fills the payment reference', () => {
+    expect(renderTemplate('{pay_instructions} Please use reference {reference} when you pay.', vars))
+      .toBe('Orange Money merchant code 000000 Please use reference M-0427 when you pay.');
   });
 
   test('throws on an unknown placeholder', () => {

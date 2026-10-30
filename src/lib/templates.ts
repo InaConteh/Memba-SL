@@ -6,6 +6,7 @@ export type TemplateVars = {
   balance_minor: number;
   description: string;
   due_date: string;          // 'YYYY-MM-DD'
+  reference: string;         // invoice payment reference, 'M-1234'
   pay_instructions?: string | null;
 };
 
@@ -23,6 +24,7 @@ export function renderTemplate(body: string, v: TemplateVars): string {
     amount: formatLeones(v.balance_minor),
     description: v.description.trim(),
     due_date: formatDate(v.due_date),
+    reference: v.reference.trim(),
     pay_instructions: v.pay_instructions?.trim() ?? '',
   };
   const out = body.replace(/\{(\w+)\}/g, (_, key: string) => {
