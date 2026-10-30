@@ -31,7 +31,7 @@ select lives_ok($$insert into payments (id, business_id, invoice_id, amount_mino
   'a part payment is accepted');
 select results_eq(
   $$select paid_minor, balance_minor, status from invoice_balances where id = '00000000-0000-0000-0000-0000000000e1'$$,
-  $$values (40000::bigint, 60000::bigint, 'open')$$,
+  $$values (40000::numeric, 60000::numeric, 'open')$$,
   'a part payment reduces the balance and keeps the invoice open');
 select is((select status from reminders where invoice_id = '00000000-0000-0000-0000-0000000000e1'),
   'prepared', 'a part payment leaves the reminder active');
@@ -49,7 +49,7 @@ select lives_ok($$insert into payments (id, business_id, invoice_id, amount_mino
   'the remaining balance is accepted');
 select results_eq(
   $$select balance_minor, status from invoice_balances where id = '00000000-0000-0000-0000-0000000000e1'$$,
-  $$values (0::bigint, 'paid')$$,
+  $$values (0::numeric, 'paid')$$,
   'full payment marks the invoice paid');
 select results_eq(
   $$select status, skip_reason from reminders where invoice_id = '00000000-0000-0000-0000-0000000000e1'$$,
@@ -62,7 +62,7 @@ select lives_ok($$update payments set voided_at = now(), void_reason = 'Entered 
   'the owner can void a payment');
 select results_eq(
   $$select balance_minor, status from invoice_balances where id = '00000000-0000-0000-0000-0000000000e1'$$,
-  $$values (60000::bigint, 'open')$$,
+  $$values (60000::numeric, 'open')$$,
   'voiding a payment reopens the invoice');
 select is((select status from reminders where invoice_id = '00000000-0000-0000-0000-0000000000e1'),
   'cancelled', 'voiding does not bring back a cancelled reminder (known gap, see blueprint notes)');

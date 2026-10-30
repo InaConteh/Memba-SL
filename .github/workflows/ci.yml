@@ -31,4 +31,16 @@ jobs:
       - run: npm ci
       # Postgres only; applies supabase/migrations
       - run: npx supabase db start
-      - run: npx supabase test db
+      # On failure, repeat the failing lines as an annotation: job logs need a
+      # signed-in account, annotations don't
+      - name: Run pgTAP
+        run: |
+          set +e
+          npx supabase test db 2>&1 | tee pgtap.log
+          status=${PIPESTATUS[0]}
+          if [ "$status" -ne 0 ]; then
+            msg=$(grep -E '^(not ok|#|Failed|Parse errors|Result|psql|ERROR)|Wstat|Bad plan|Dubious' pgtap.log | head -80 \
+              | sed -e 's/%/%25/g' -e 's/\r//g' | sed ':a;N;$!ba;s/\n/%0A/g')
+            echo "::error title=supabase test db failed::${msg:-see job log}"
+          fi
+          exit "$status"
