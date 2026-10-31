@@ -4,6 +4,10 @@ begin;
 create extension if not exists pgtap with schema extensions;
 select plan(14);
 
+-- The generator works across all businesses, so start from empty tables:
+-- `supabase db start` loads seed.sql first. Undone by the rollback below.
+truncate businesses cascade;
+
 insert into auth.users (id, email) values
   ('00000000-0000-0000-0000-0000000000a1', 'owner-a@example.test');
 insert into businesses (id, name, segment) values
