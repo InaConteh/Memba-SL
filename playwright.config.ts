@@ -1,4 +1,8 @@
+import { existsSync } from 'node:fs';
 import { defineConfig, devices } from '@playwright/test';
+
+// Same variables the dev server reads (e.g. MEMBA_DEV_TEST_PASSWORD)
+if (existsSync('.env.local')) process.loadEnvFile('.env.local');
 
 export default defineConfig({
   testDir: './tests/e2e',

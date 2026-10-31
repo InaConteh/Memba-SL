@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Don't let `next dev` write AGENTS.md when it detects a coding agent; CLAUDE.md is the project's guide
+  agentRules: false,
   turbopack: {
     rules: {
       "*.css": {
