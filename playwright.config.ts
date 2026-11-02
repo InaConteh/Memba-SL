@@ -10,6 +10,9 @@ export default defineConfig({
   globalTeardown: './tests/e2e/fixtures/global-teardown.ts',
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
+  // Every step talks to the hosted memba-dev project; the default 5s is too tight on a slow link
+  timeout: 120_000,
+  expect: { timeout: 15_000 },
   use: {
     baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',

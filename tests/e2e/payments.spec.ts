@@ -16,7 +16,8 @@ async function signIn(page: Page) {
   await page.getByLabel('Email').fill(business!.email);
   await page.getByLabel('Password').fill(business!.password);
   await page.getByRole('button', { name: 'Sign in' }).click();
-  await expect(page).toHaveURL(/\/today$/);
+  // Sign-in makes two round trips to Supabase Auth plus the audit insert
+  await expect(page).toHaveURL(/\/today$/, { timeout: 30_000 });
 }
 
 const balance = (page: Page) => page.locator('dt', { hasText: 'Balance' }).locator('+ dd');
@@ -66,7 +67,8 @@ test('customer → invoice → part payment → full payment → void', async ({
   await sheet.getByRole('button', { name: 'Save payment' }).click();
   await expect(sheet).toBeHidden();
   await expect(balance(page)).toHaveText('NLe 0');
-  await expect(page.getByText('Paid', { exact: true })).toBeVisible();
+  // The status line ("Due 2 Nov · Paid"), not the "Paid" amount label
+  await expect(page.getByText(/^Due .+ · Paid$/)).toBeVisible();
   await expect(page.getByRole('button', { name: 'Record payment' })).toHaveCount(0);
 
   // Voiding the 500 reopens the invoice
