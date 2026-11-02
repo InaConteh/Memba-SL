@@ -8,6 +8,11 @@ export function parseLeones(input: string): number {
   return minor;
 }
 
+/** The amount as an owner would type it, without the currency: 100000 → '1,000', 2550 → '25.50'. */
+export function formatAmountInput(minor: number): string {
+  return formatLeones(minor).replace(/^-?NLe /, '');
+}
+
 export function formatLeones(minor: number): string {
   if (!Number.isSafeInteger(minor)) throw new Error('Amount must be an integer in minor units');
   const sign = minor < 0 ? '-' : '';

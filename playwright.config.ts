@@ -6,6 +6,8 @@ if (existsSync('.env.local')) process.loadEnvFile('.env.local');
 
 export default defineConfig({
   testDir: './tests/e2e',
+  globalSetup: './tests/e2e/fixtures/global-setup.ts',
+  globalTeardown: './tests/e2e/fixtures/global-teardown.ts',
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   use: {

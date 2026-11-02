@@ -1,4 +1,4 @@
-// Generated from the memba-dev schema (migrations 0001-0006) via the Supabase
+// Generated from the memba-dev schema (migrations 0001-0007) via the Supabase
 // connector. Regenerate after every migration; don't edit by hand.
 
 export type Json =
@@ -156,7 +156,7 @@ export type Database = {
           description: string
           due_date: string
           id?: string
-          reference: string
+          reference?: string
           schedule_id?: string | null
           status?: string
           updated_at?: string
@@ -176,6 +176,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "invoices_business_id_customer_id_fkey"
+            columns: ["business_id", "customer_id"]
+            isOneToOne: false
+            referencedRelation: "customer_balances"
+            referencedColumns: ["business_id", "id"]
+          },
           {
             foreignKeyName: "invoices_business_id_customer_id_fkey"
             columns: ["business_id", "customer_id"]
@@ -414,6 +421,32 @@ export type Database = {
       }
     }
     Views: {
+      customer_balances: {
+        Row: {
+          archived_at: string | null
+          business_id: string | null
+          created_at: string | null
+          group_label: string | null
+          id: string | null
+          language: string | null
+          name: string | null
+          notes: string | null
+          oldest_due_date: string | null
+          open_invoices: number | null
+          overdue_minor: number | null
+          owed_minor: number | null
+          phone: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customers_business_id_fkey"
+            columns: ["business_id"]
+            isOneToOne: false
+            referencedRelation: "businesses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       invoice_balances: {
         Row: {
           amount_minor: number | null
@@ -432,6 +465,13 @@ export type Database = {
           updated_at: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "invoices_business_id_customer_id_fkey"
+            columns: ["business_id", "customer_id"]
+            isOneToOne: false
+            referencedRelation: "customer_balances"
+            referencedColumns: ["business_id", "id"]
+          },
           {
             foreignKeyName: "invoices_business_id_customer_id_fkey"
             columns: ["business_id", "customer_id"]
