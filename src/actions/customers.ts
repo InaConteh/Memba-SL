@@ -45,7 +45,10 @@ export async function updateCustomer(_prev: FormState, formData: FormData): Prom
   if (!member) return { error, values };
 
   const { confirm_duplicate, ...customer } = parsed.data;
-  const duplicate = await findDuplicatePhone(member, customer.phone, id.data);
+  const { data: current } = await member.supabase.from('customers').select('phone').eq('id', id.data).maybeSingle();
+  if (!current) return { error: 'This customer no longer exists.', values };
+  // Only a new number needs checking: a shared phone was already confirmed when it was saved
+  const duplicate = customer.phone !== current.phone ? await findDuplicatePhone(member, customer.phone, id.data) : null;
   if (duplicate && !confirm_duplicate) {
     return { warning: `${duplicate} already has this phone number. Save anyway?`, values };
   }

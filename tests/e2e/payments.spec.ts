@@ -43,6 +43,7 @@ test('customer → invoice → part payment → full payment → void', async ({
   await page.getByLabel('Amount').fill('1,500,000');
   await page.getByLabel('Amount').press('Enter');
   await expect(page.getByText(/Is this in new Leones\?/)).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Yes, it’s in new Leones' })).toBeInViewport({ ratio: 1 });
   // Had Enter confirmed it, the page would leave this form and the next steps would fail
   await Promise.all([
     page.waitForResponse((r) => r.request().method() === 'POST' && r.url().includes('/invoices/new')),
@@ -100,6 +101,31 @@ test('customer → invoice → part payment → full payment → void', async ({
   await page.goto(`/customers?q=${reference}`);
   await expect(page.getByRole('link', { name: new RegExp(`Term 1 fees.*${reference}`) })).toBeVisible();
   await expect(page.getByRole('link', { name: /Kadiatu Testcase/ })).toBeVisible();
+
+  // A second customer may share a phone (a parent with two children) after confirming
+  await page.goto('/customers/new');
+  await page.getByLabel('Name').fill('Second Testcase');
+  await page.getByLabel('WhatsApp number').fill('+232 00 000 999');
+  await page.getByRole('button', { name: 'Save customer' }).click();
+  await expect(page.getByRole('button', { name: 'Save anyway' })).toBeInViewport({ ratio: 1 });
+  await page.getByRole('button', { name: 'Save anyway' }).click();
+  await expect(page.getByRole('heading', { name: 'Second Testcase' })).toBeVisible();
+
+  // Editing only the name doesn't ask about the phone again
+  await page.getByRole('link', { name: 'Edit' }).click();
+  await page.getByLabel('Name').fill('Second Renamed');
+  await page.getByRole('button', { name: 'Save changes' }).click();
+  await expect(page.getByRole('heading', { name: 'Second Renamed' })).toBeVisible();
+
+  // Changing the phone to another customer's number still asks
+  await page.getByRole('link', { name: 'Edit' }).click();
+  await page.getByLabel('WhatsApp number').fill('000 000 998');
+  await page.getByRole('button', { name: 'Save changes' }).click();
+  await expect(page.getByRole('heading', { name: 'Second Renamed' })).toBeVisible();
+  await page.getByRole('link', { name: 'Edit' }).click();
+  await page.getByLabel('WhatsApp number').fill('000 000 999');
+  await page.getByRole('button', { name: 'Save changes' }).click();
+  await expect(page.locator('form').getByRole('alert')).toContainText('Kadiatu Testcase already has this phone number');
 
   // Every action left an audit event
   const { data: events } = await adminClient()!.from('events').select('type').eq('business_id', business!.businessId);
