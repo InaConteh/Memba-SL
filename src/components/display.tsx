@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ChevronLeft } from 'lucide-react';
+import { initials, type PillTone } from '@/lib/customer-status';
 import { dueLabel, daysBetween, todayIso } from '@/lib/dates';
 import { cn } from '@/lib/utils';
 
@@ -32,8 +33,27 @@ export function isOverdue(dueDate: string | null, today = todayIso()): boolean {
 
 export function StatusText({ label, overdue, className }: { label: string; overdue: boolean; className?: string }) {
   return (
-    <span className={cn('text-xs', overdue ? 'font-semibold text-destructive' : 'text-muted-foreground', className)}>
+    <span className={cn('text-xs', overdue ? 'font-semibold text-nudge-deep' : 'text-muted-foreground', className)}>
       {label}
+    </span>
+  );
+}
+
+const PILL_TONES: Record<PillTone, string> = {
+  overdue: 'bg-nudge-mist text-nudge-deep',
+  good: 'bg-forest-mist text-forest-deep',
+  neutral: 'bg-secondary text-muted-foreground',
+};
+
+export function Pill({ label, tone }: { label: string; tone: PillTone }) {
+  return <span className={cn('rounded-full px-2.5 py-0.5 text-xs font-semibold whitespace-nowrap', PILL_TONES[tone])}>{label}</span>;
+}
+
+/** Initials in a circle. Decorative: the name is always beside it. */
+export function Avatar({ name, tone }: { name: string; tone: PillTone }) {
+  return (
+    <span aria-hidden className={cn('flex size-11 shrink-0 items-center justify-center rounded-full text-sm font-semibold', PILL_TONES[tone])}>
+      {initials(name)}
     </span>
   );
 }

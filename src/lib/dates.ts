@@ -24,3 +24,21 @@ export function dueLabel(dueDate: string, today: string = todayIso()): string {
   if (late > 0) return `${late} ${late === 1 ? 'day' : 'days'} overdue`;
   return `Due in ${-late} ${late === -1 ? 'day' : 'days'}`;
 }
+
+export function addDays(iso: string, days: number): string {
+  return new Date(Date.parse(`${iso}T00:00:00Z`) + days * 86_400_000).toISOString().slice(0, 10);
+}
+
+/** '2026-11-25' → 'Nov'. */
+export function monthName(iso: string): string {
+  return MONTHS[Number(iso.slice(5, 7)) - 1];
+}
+
+export function startOfMonth(iso: string): string {
+  return `${iso.slice(0, 7)}-01`;
+}
+
+export function endOfMonth(iso: string): string {
+  const [y, m] = iso.split('-').map(Number);
+  return new Date(Date.UTC(y, m, 0)).toISOString().slice(0, 10);
+}

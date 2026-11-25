@@ -17,7 +17,7 @@ export function BottomNav() {
   return (
     <nav
       aria-label="Main"
-      className="fixed inset-x-0 bottom-0 z-10 border-t bg-background pb-[env(safe-area-inset-bottom)]"
+      className="fixed inset-x-0 bottom-0 z-10 border-t bg-card pb-[env(safe-area-inset-bottom)]"
     >
       <ul className="mx-auto grid max-w-md grid-cols-4">
         {TABS.map(({ href, label, Icon }) => {

@@ -23,12 +23,12 @@ The designs were made before this repo's pilot scope was set, so **this app and 
 | 01 | Welcome | Not built | Pilot accounts are created by script, so no public sign-up yet |
 | 02–03 | Phone number, verify code | Not built | Phone OTP is a later change (blueprint: Supabase Send SMS hook) |
 | 04 | Business setup | Script only | `scripts/create-business.ts` |
-| 05 | Home: credit book | Partly: `/customers` is built; `/dashboard` is a placeholder | Design puts the owed total above the customer list. Use it as the look for the dashboard build |
-| 06 | Add debt (5-second entry) | Partly: `/invoices/new` | The keypad and quick-pick chips are ideas to test if owners find entry slow |
-| 07 | Customer ledger | Built: `/customers/[id]` | Design adds a repayment progress bar and one combined history |
-| 08 | Record payment | Built: record-payment sheet (balance prefilled, method, reference) | Design adds a quick "half" amount and a line saying what will still be owed |
+| 05 | Home: credit book | Built: `/customers` | Owed total, overdue and collected this month above the list; status pills; All / Overdue / Due soon / Nothing owed / Archived. `/dashboard` is still a placeholder |
+| 06 | Add debt (5-second entry) | Partly: `/invoices/new` | Large amount field and due-date shortcuts are built. The keypad and recent-customer chips are ideas to test if owners find entry slow |
+| 07 | Customer ledger | Built: `/customers/[id]` | Includes the progress bar, call button and one combined history. "Remind now" comes with `/today` |
+| 08 | Record payment | Built: record-payment sheet (balance prefilled, method, reference) | Includes Full balance / Half and the line saying what will still be owed. No receipt message |
 | 09 | Send reminder (tone choice) | Not built: `/today` is a placeholder; reminder rows are generated in the database | Each schedule step has a tone. Design shows the message preview and lets the owner switch tone per message |
-| 10 | Home: empty state | Built differently | "Add your first customer" empty state exists |
+| 10 | Home: empty state | Built: empty `/customers` | No phone-contacts picker |
 | 11 | Debtor receives reminder | WhatsApp message | Pay link / USSD lines only if pay links ship (see `docs/payments-providers.md`) |
 | 12 | Debtor payment page | Not built | Needs a payment provider. After the pilot |
 | 13 | Reminders & automation | Not built | Schedule is per business (`{0,3,7}` by default). No settings UI in the pilot |

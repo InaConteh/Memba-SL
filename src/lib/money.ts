@@ -21,3 +21,18 @@ export function formatLeones(minor: number): string {
   const cents = abs % 100;
   return `${sign}NLe ${whole}${cents ? '.' + String(cents).padStart(2, '0') : ''}`;
 }
+
+/** Half a balance, rounded down to a whole minor unit. */
+export function halfOf(balanceMinor: number): number {
+  return Math.floor(balanceMinor / 2);
+}
+
+/** What would still be owed after the typed amount; null when it isn't a valid payment yet. */
+export function balanceAfter(balanceMinor: number, input: string): number | null {
+  try {
+    const left = balanceMinor - parseLeones(input);
+    return left >= 0 ? left : null;
+  } catch {
+    return null;
+  }
+}

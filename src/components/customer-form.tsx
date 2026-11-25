@@ -35,8 +35,8 @@ export function CustomerForm({ action, customer, submitLabel }: Props) {
       <Field label="Notes (optional)" htmlFor="c-notes">
         <textarea id="c-notes" name="notes" rows={2} defaultValue={v.notes} className={`${inputClass} h-auto py-2`} />
       </Field>
+      <SubmitButton pendingText="Saving…" className="order-last">{submitLabel}</SubmitButton>
       <FormMessages state={state} confirmName="confirm_duplicate" />
-      <SubmitButton pendingText="Saving…">{submitLabel}</SubmitButton>
     </form>
   );
 }

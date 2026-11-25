@@ -43,24 +43,24 @@ export default async function InvoicePage({ params }: PageProps<'/invoices/[id]'
       <BackLink href={`/customers/${invoice.customer_id}`} label={customer?.name ?? 'Customer'} />
 
       <div className="flex flex-col gap-2">
-        <h1 className="text-xl font-semibold">{invoice.description}</h1>
+        <h1 className="text-2xl font-bold">{invoice.description}</h1>
         <div className="flex flex-wrap items-center gap-2">
-          <span className="rounded-md border border-foreground px-2.5 py-1 font-mono text-base font-semibold">{invoice.reference}</span>
+          <span className="rounded-lg border border-foreground bg-card px-2.5 py-1 font-mono text-base font-semibold">{invoice.reference}</span>
           <span className="text-sm text-muted-foreground">Payment reference the customer quotes</span>
         </div>
       </div>
 
       <dl className="grid grid-cols-3 gap-2">
-        <div className="flex flex-col gap-0.5 rounded-xl bg-muted p-3">
+        <div className="flex flex-col gap-0.5 rounded-2xl border bg-card p-3">
           <dt className="text-xs text-muted-foreground">Amount</dt>
           <dd className="text-base font-semibold">{formatLeones(minor(invoice.amount_minor))}</dd>
         </div>
-        <div className="flex flex-col gap-0.5 rounded-xl bg-muted p-3">
+        <div className="flex flex-col gap-0.5 rounded-2xl border bg-card p-3">
           <dt className="text-xs text-muted-foreground">Paid</dt>
           <dd className="text-base font-semibold">{formatLeones(minor(invoice.paid_minor))}</dd>
         </div>
-        <div className="flex flex-col gap-0.5 rounded-xl bg-foreground p-3 text-background">
-          <dt className="text-xs opacity-80">Balance</dt>
+        <div className="flex flex-col gap-0.5 rounded-2xl bg-forest p-3 text-white">
+          <dt className="text-xs">Balance</dt>
           <dd className="text-base font-bold">{formatLeones(Math.max(balance, 0))}</dd>
         </div>
       </dl>
@@ -91,7 +91,7 @@ export default async function InvoicePage({ params }: PageProps<'/invoices/[id]'
             {paymentsResult.data.map((p) => (
               <li
                 key={p.id}
-                className={cn('flex items-center justify-between gap-3 rounded-xl border px-4 py-3', p.voided_at && 'border-dashed text-muted-foreground')}
+                className={cn('flex items-center justify-between gap-3 rounded-2xl border bg-card px-4 py-3', p.voided_at && 'border-dashed bg-transparent text-muted-foreground')}
               >
                 <span className="flex min-w-0 flex-col gap-0.5">
                   <span className={cn('text-base font-medium', p.voided_at && 'line-through')}>

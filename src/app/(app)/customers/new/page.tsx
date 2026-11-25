@@ -9,7 +9,7 @@ export default function NewCustomerPage() {
   return (
     <div className="flex flex-col gap-4">
       <BackLink href="/customers" label="Customers" />
-      <h1 className="text-xl font-semibold">Add a customer</h1>
+      <h1 className="text-2xl font-bold">Add a customer</h1>
       <CustomerForm action={createCustomer} submitLabel="Save customer" />
     </div>
   );

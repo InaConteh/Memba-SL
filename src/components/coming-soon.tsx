@@ -6,7 +6,7 @@ type Props = { title: string; children: ReactNode };
 export function ComingSoon({ title, children }: Props) {
   return (
     <div className="flex flex-col gap-2">
-      <h1 className="text-xl font-semibold">{title}</h1>
+      <h1 className="text-2xl font-bold">{title}</h1>
       <p className="text-sm text-muted-foreground">{children}</p>
     </div>
   );

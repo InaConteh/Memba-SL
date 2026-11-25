@@ -21,7 +21,7 @@ export async function createInvoice(_prev: FormState, formData: FormData): Promi
     member.supabase.from('customers').select('id, archived_at').eq('id', customer_id).maybeSingle(),
   ]);
   if (!customer.data) return { error: 'This customer no longer exists.', values };
-  if (customer.data.archived_at) return { error: 'This customer is archived. Unarchive them first.', values };
+  if (customer.data.archived_at) return { error: 'This customer is archived, so you can’t add an invoice.', values };
   // Without a schedule the reminder generator would silently skip the invoice
   if (!schedule.data) return { error: 'Your business has no reminder schedule yet. Please contact support.', values };
 

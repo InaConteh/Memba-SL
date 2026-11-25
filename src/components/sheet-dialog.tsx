@@ -46,7 +46,7 @@ export function SheetDialog({ triggerLabel, triggerVariant = 'outline', triggerC
         ref={ref}
         onClose={close}
         aria-labelledby={titleId}
-        className="mx-auto mt-auto mb-0 max-h-[92dvh] w-full max-w-md rounded-t-2xl bg-background p-0 text-foreground backdrop:bg-black/45"
+        className="mx-auto mt-auto mb-0 max-h-[92dvh] w-full max-w-md rounded-t-3xl bg-background p-0 text-foreground backdrop:bg-black/45"
       >
         <div className="flex flex-col gap-4 px-4 pt-3 pb-6">
           <div aria-hidden className="mx-auto h-1 w-10 rounded-full bg-muted-foreground/30" />

@@ -26,7 +26,11 @@ export function SubmitButton({ children, pendingText, variant = 'default', class
 
 type MessagesProps = { state: FormState; confirmName?: string; confirmLabel?: string };
 
-/** The action's error, or its warning with a button that resubmits with confirmation. */
+/**
+ * The action's error, or its warning with a button that resubmits with confirmation.
+ * Render it after the form's own SubmitButton (which gets `order-last`): Enter presses
+ * the first submit button in the markup, and that must never be "Save anyway".
+ */
 export function FormMessages({ state, confirmName, confirmLabel = 'Save anyway' }: MessagesProps) {
   if (state.error) {
     return (
@@ -37,10 +41,10 @@ export function FormMessages({ state, confirmName, confirmLabel = 'Save anyway' 
   }
   if (state.warning) {
     return (
-      <div role="alert" className="flex flex-col gap-3 rounded-lg bg-amber-50 px-3 py-3 text-sm text-amber-900">
+      <div role="alert" className="flex flex-col gap-3 rounded-lg bg-nudge-mist px-3 py-3 text-sm text-nudge-deep">
         <p>{state.warning}</p>
         {confirmName && (
-          <SubmitButton name={confirmName} value="1" variant="outline" pendingText="Saving…" className="h-11 bg-white">
+          <SubmitButton name={confirmName} value="1" variant="outline" pendingText="Saving…" className="h-11 bg-card">
             {confirmLabel}
           </SubmitButton>
         )}
@@ -63,4 +67,4 @@ export function Field({ label, htmlFor, hint, children }: FieldProps) {
 }
 
 export const inputClass =
-  'h-12 w-full rounded-lg border border-input bg-transparent px-3 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50';
+  'h-12 w-full rounded-lg border border-input bg-card px-3 text-base outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50';

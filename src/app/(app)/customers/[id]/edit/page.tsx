@@ -24,7 +24,7 @@ export default async function EditCustomerPage({ params }: PageProps<'/customers
   return (
     <div className="flex flex-col gap-4">
       <BackLink href={`/customers/${id}`} label={customer.name} />
-      <h1 className="text-xl font-semibold">Edit customer</h1>
+      <h1 className="text-2xl font-bold">Edit customer</h1>
       <CustomerForm action={updateCustomer} customer={customer} submitLabel="Save changes" />
     </div>
   );

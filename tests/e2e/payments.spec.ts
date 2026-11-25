@@ -27,8 +27,8 @@ test('customer → invoice → part payment → full payment → void', async ({
 
   // Add a customer (fictional, unallocated +232 00 number)
   await page.getByRole('navigation', { name: 'Main' }).getByRole('link', { name: 'Customers' }).click();
-  await expect(page.getByText('Add your first customer')).toBeVisible();
-  await page.getByRole('link', { name: 'Add', exact: true }).click();
+  await expect(page.getByRole('heading', { name: 'Move your credit book into Memba' })).toBeVisible();
+  await page.getByRole('link', { name: 'Add your first customer' }).click();
   await page.getByLabel('Name').fill('Kadiatu Testcase');
   await page.getByLabel('WhatsApp number').fill('000 000 999');
   await page.getByLabel('Class, route or group (optional)').fill('JSS 3');
@@ -39,7 +39,18 @@ test('customer → invoice → part payment → full payment → void', async ({
   // Create an invoice; the database issues the reference
   await page.getByRole('link', { name: 'New invoice' }).click();
   await page.getByLabel('What is it for?').fill('Term 1 fees');
+  // An old-Leone amount asks first, and Enter must not answer "yes" for the owner
+  await page.getByLabel('Amount').fill('1,500,000');
+  await page.getByLabel('Amount').press('Enter');
+  await expect(page.getByText(/Is this in new Leones\?/)).toBeVisible();
+  // Had Enter confirmed it, the page would leave this form and the next steps would fail
+  await Promise.all([
+    page.waitForResponse((r) => r.request().method() === 'POST' && r.url().includes('/invoices/new')),
+    page.getByLabel('Amount').press('Enter'),
+  ]);
+  await expect(page.getByText(/Is this in new Leones\?/)).toBeVisible();
   await page.getByLabel('Amount').fill('1,500');
+  await page.getByRole('button', { name: '1 week' }).click();
   await page.getByRole('button', { name: 'Save invoice' }).click();
   await expect(page.getByRole('heading', { name: 'Term 1 fees' })).toBeVisible();
   const reference = (await page.getByText(/^M-\d{4}$/).textContent())!.trim();
@@ -49,7 +60,11 @@ test('customer → invoice → part payment → full payment → void', async ({
   await page.getByRole('button', { name: 'Record payment' }).click();
   const sheet = page.getByRole('dialog', { name: 'Record payment' });
   await expect(sheet.getByLabel('Amount received')).toHaveValue('1,500');
+  await sheet.getByRole('button', { name: /^Half/ }).click();
+  await expect(sheet.getByLabel('Amount received')).toHaveValue('750');
+  await expect(sheet.getByText('NLe 750 will still be owed.')).toBeVisible();
   await sheet.getByLabel('Amount received').fill('500');
+  await expect(sheet.getByText('NLe 1,000 will still be owed.')).toBeVisible();
   await sheet.getByLabel('Cash').check();
   await sheet.getByRole('button', { name: 'Save payment' }).click();
   await expect(sheet).toBeHidden();
@@ -62,7 +77,8 @@ test('customer → invoice → part payment → full payment → void', async ({
   await expect(sheet.getByRole('alert')).toHaveText('That’s more than the NLe 1,000 still owed.');
 
   // Full payment: the prefilled balance, Orange Money with a transaction ID
-  await sheet.getByLabel('Amount received').fill('1,000');
+  await sheet.getByRole('button', { name: /^Full balance/ }).click();
+  await expect(sheet.getByText(/Nothing left to pay/)).toBeVisible();
   await sheet.getByLabel('Transaction ID (optional)').fill('TEST-OM-E2E');
   await sheet.getByRole('button', { name: 'Save payment' }).click();
   await expect(sheet).toBeHidden();
