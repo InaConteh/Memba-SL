@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { BottomNav } from '@/components/bottom-nav';
+import { MembaMark } from '@/components/logo';
 import { createClient } from '@/lib/supabase/server';
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
@@ -14,8 +15,9 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-md flex-col">
-      <header className="border-b px-4 py-3">
-        <p className="truncate text-base font-semibold">{business?.name ?? 'Memba'}</p>
+      <header className="flex items-center gap-2.5 border-b bg-background px-4 py-3">
+        <MembaMark className="size-7" />
+        <p className="truncate font-heading text-lg font-bold">{business?.name ?? 'Memba'}</p>
       </header>
       <main className="flex-1 px-4 pt-4 pb-24">
         {business ? children : <NoBusiness />}

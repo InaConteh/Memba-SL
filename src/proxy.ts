@@ -6,6 +6,7 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  // Everything except static files and images
-  matcher: ['/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)'],
+  // Everything except static files, images and the web app manifest (browsers fetch
+  // it without cookies, so a redirect to /login would break "Add to Home Screen")
+  matcher: ['/((?!_next/static|_next/image|favicon.ico|manifest.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)'],
 };

@@ -29,7 +29,7 @@ export function BottomNav() {
                 aria-current={isActive ? 'page' : undefined}
                 className={cn(
                   'flex min-h-14 flex-col items-center justify-center gap-1 text-xs',
-                  isActive ? 'font-medium text-foreground' : 'text-muted-foreground',
+                  isActive ? 'font-semibold text-primary' : 'text-muted-foreground',
                 )}
               >
                 <Icon aria-hidden className="size-5" />
